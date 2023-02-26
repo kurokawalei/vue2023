@@ -113,20 +113,17 @@ export default {
           console.log(err);
         });
     },
-    delCartAll(){
-
-        this.$http
+    delCartAll() {
+      this.$http
         .delete(`${VITE_APP_URL}/v2/api/${VITE_APP_PATH}/carts`)
         .then((res) => {
-         
           alert(`${res.data.message}`);
           this.getCarList();
         })
         .catch((err) => {
           console.log(err);
         });
-
-    }
+    },
   },
   mounted() {
     this.getCarList();
