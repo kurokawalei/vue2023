@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kada練習</title>
+</head>
+
+<body>
+
+
+    <div id="app">
+        <ul></ul>
+    </div>
+
+
+
+    <input type="text" id="inputAdd">
+
+    <button type="button" id="btnAdd">送出</button>
+
+
+
+
+
+</body>
+
+<script>
+    //資料
+    const data = [
+
+        {
+            id: 1,
+            content: '小明'
+        },
+        {
+            id: 2,
+            content: '小花'
+        },
+        {
+            id: 3,
+            content: '小安'
+        },
+
+    ];
+
+
+    const btn = document.querySelector('#btnAdd');
+    const input = document.querySelector('#inputAdd');
+    const box = document.querySelector('#app ul');
+    const btnAdd = document.querySelector('#btnAdd');
+
+    let num = data.length;
+
+
+
+
+    btnAdd.addEventListener( 'click' , function(){
+
+        let  value  = input.value;
+        input.value="";
+        addItem(value);
+    } );
+
+
+
+
+    //增加
+    function addItem(content){
+
+        num++;
+        data.push({
+            id:num,
+            content
+        });
+
+        render();
+
+        console.log(data)
+        
+    };
+
+   
+
+    //移除
+    function removeItem(id){
+
+        const index = data.findIndex( (item) =>    item.id === id );
+        data.splice(index,1);
+       
+        render();
+        console.log(data);
+
+    };
+
+   
+   
+    
+    //炫覽
+    function render(){
+        let str ='';
+        data.forEach( (item ,i) => {
+            str+=`<li>${item.content} <button type="button" style="maingin-left:5px;" data-id="${item.id}" class="removeBtn">刪除</button></li> `
+        });
+
+        box.innerHTML = str;
+
+        const removeBtn = document.querySelectorAll('.removeBtn');
+        removeBtn.forEach( (btn)=> {
+            btn.addEventListener( 'click' , (e)=> {
+                
+                  const id = Number.parseInt(e.target.dataset.id);
+                 console.log(id);
+                 removeItem(id);
+            } )
+        } )
+
+        
+
+
+    }
+
+console.log(data);
+
+
+    render();
+
+
+
+
+
+
+</script>
+
+
+</html>

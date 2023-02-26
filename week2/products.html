@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <style>
+        .container {
+            height: 100vh;
+        }
+
+        .row {
+            height: inherit;
+        }
+        .row .col-8 img {
+            width: 400px;
+            height: 400px;
+            object-fit: cover;
+            background-position: center;
+
+        }
+
+       
+      
+    </style>
+</head>
+
+<body>
+
+    <div id="app">
+
+
+        <div class="container">
+            <div class="row py-3">
+                <div class="col-md-6">
+                    <h2>產品列表</h2>
+                    <table class="table table-hover mt-4">
+                        <thead>
+                            <tr>
+                                <th width="150">產品名稱</th>
+                                <th width="120">
+                                    原價
+                                </th>
+                                <th width="120">
+                                    售價
+                                </th>
+                                <th width="150">
+                                    是否啟用
+                                </th>
+                                <th width="120">
+                                    查看細節
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for=" (item , i)  in prList"  :key="item.id">
+                                <td width="150">
+                                    {{ item.title}}
+                                </td>
+                                <td width="120">
+                                    {{ item.origin_price}}
+                                </td>
+                                <td width="120">
+                                    {{ item.price}}
+                                </td>
+                                <td width="150">
+                                    <span class="text-success" v-if="item.is_enabled == 1">啟用</span>
+                                    <span v-else>未啟用</span>
+                                </td>
+                                <td width="120">
+                                    <button type="button" class="btn btn-primary" @click="tempPrlist =  item">查看細節</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>目前有 <span>{{ prList.length}}</span> 項產品</p>
+                </div>
+                <div class="col-md-6">
+                    <h2>單一產品細節</h2>
+                  
+                    <p class="text-secondary" v-if="!tempPrlist.title">請選擇一個商品查看</p>
+                    <template v-if="tempPrlist.title">
+                        <div class="card mb-3">
+
+                            <div class="row g-2">
+                                <div class="col-8">
+                                    <img class="card-img-top primary-image img-fluid" alt="主圖" :src="tempPrlist.imageUrl">
+                                </div>
+                                <div class="col-4">
+                                    <template>
+                                        <img alt="" class="images mb-2 img-fluid">
+                                    </template>
+                                </div>
+
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">
+
+                                    <span class="badge bg-primary ms-2">{{ tempPrlist.title }}</span>
+                                </h5>
+                                <p class="card-text">商品描述：{{tempPrlist.description}}</p>
+                                <p class="card-text">商品內容：{{tempPrlist.content}}</p>
+                                <div class="d-flex">
+                                    <p class="card-text me-2">售價：${{tempPrlist.price}}元/{{tempPrlist.unit}}</p>
+                                    <p class="card-text text-secondary">原價：<del>${{tempPrlist.origin_price}}元/{{tempPrlist.unit}}</del></p>
+                                  
+                                </div>
+                            </div>
+                        </div>
+
+                    </template>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.9.1/axios.min.js'
+        integrity='sha512-Xk3wWei2TGrsh9kDSBKUMIjw/86sLUvhtnv9f7fOuIwhhiUTKz8szkWkzHthrM5Bb3Bu9idSzkxOrkzhcneuiw=='
+        crossorigin='anonymous'></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"
+        integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js"
+        integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous">
+    </script>
+
+
+
+
+    <script>
+        const app = Vue.createApp({
+
+            data() {
+                return {
+                    apiUrl: 'https://vue3-course-api.hexschool.io/v2',
+                    path: 'kurokawa2023',
+                    prList: [],
+                    tempPrlist:{},
+
+                 
+
+                }
+            },
+            methods: {
+
+                //抓產品列表
+                getPrlist() {
+                    axios.get(`${this.apiUrl}/api/${this.path}/products`)
+                        .then((res) => {
+                          
+                            this.prList = res.data.products;
+                           
+                        })
+                        .catch((err) => {
+
+                            console.log(err);
+
+                        })
+                },
+
+                //認證
+                check() {
+                    axios.post(`${this.apiUrl}/api/user/check`  )
+                        .then((res) => {
+                          console.log(`認證為${res.data.success}`);
+                          this.getPrlist();
+                          
+                        })
+                        .catch((err) => {
+                            console.log('認證失敗');
+                            window.location = 'index.html';
+
+                        })
+
+                },
+
+
+
+
+
+
+
+            },
+            mounted() {
+
+                // 取token
+                const token = document.cookie.replace(/(?:(?:^|.*;\s*)hexToken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+                axios.defaults.headers.common.Authorization = token;
+
+                this.check();
+
+
+            }
+
+        }).mount('#app');
+    </script>
+
+</body>
+
+</html>

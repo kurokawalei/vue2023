@@ -1,0 +1,35 @@
+@import 'bootstrap/scss/functions';
+@import './variables';
+@import 'bootstrap/scss/bootstrap';
+
+
+.page-item {
+
+    &.active {
+       a {
+        background-color: #fe0697;
+        color: #fff;
+        &:focus{
+            box-shadow: none;
+        }
+       }
+    }
+}
+
+.btn {
+    transition: all 0.35s ease;
+    &:hover {
+        background-color: #fe0697;
+        color: #fff;
+        transition: all 0.35s ease;
+        border-color: #fe0697;
+    }
+
+}
+
+.infoBox {
+    .title {
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+}
