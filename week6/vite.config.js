@@ -12,7 +12,7 @@ export default defineConfig({
     })
   ],
   
-  base: 'vue2023/week6/dist/',
+  base: '/vue2023/week6/dist/',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
